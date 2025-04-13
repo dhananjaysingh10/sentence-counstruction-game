@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from 'react';
-
-export default function Timer({ duration, onTimeout }) {
-  const [seconds, setSeconds] = useState(duration);
+import { useState, useEffect } from "react"
+const Timer = ({ duration, onTimeout }) => {
+  const [timeLeft, setTimeLeft] = useState(duration * 60)
 
   useEffect(() => {
-    if (seconds <= 0) {
-      onTimeout();
-      return;
+    if (!timeLeft) {
+      onTimeout()
+      return
     }
-    const interval = setInterval(() => {
-      setSeconds(prev => prev - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [seconds]);
 
-  return <div className="text-right text-gray-500">Time Left: {seconds}s</div>;
+    const intervalId = setInterval(() => {
+      setTimeLeft(timeLeft - 1)
+    }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [timeLeft, onTimeout])
+
+  const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60)
+    const seconds = timeInSeconds % 60
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`
+  }
+
+  return <span>{formatTime(timeLeft)}</span>
 }
+
+export default Timer

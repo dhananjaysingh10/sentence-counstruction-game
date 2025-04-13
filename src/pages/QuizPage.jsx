@@ -1,6 +1,7 @@
 import React from 'react';
 import SentenceQuestion from '../components/SentenceQuestion';
 
+
 export default function QuizPage({ question, onNext }) {
   if (!question) {
     return <div className="text-center p-8 text-lg">Loading question...</div>;
